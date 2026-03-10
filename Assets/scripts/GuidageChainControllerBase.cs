@@ -1,8 +1,8 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuidageChainController : MonoBehaviour
+public class GuidageChainControllerBase : MonoBehaviour
 {
     [System.Serializable]
     public class Relay
@@ -34,12 +34,6 @@ public class GuidageChainController : MonoBehaviour
     [SerializeField] private bool autoStart = true;
     [SerializeField] private bool resetToStartOnEnable = true;
 
-    [Header("Occlusion murs")]
-    [SerializeField] private LayerMask wallMask;
-    [SerializeField] private bool couperSiMur = true;
-
-    [SerializeField] private string channelId = "A";
-
     private Transform playerHead;
     private bool guidageActif;
 
@@ -61,14 +55,7 @@ public class GuidageChainController : MonoBehaviour
         RefreshPlayer();
         StopAllOutputAudio();
 
-        if (autoStart)
-            StartCoroutine(StartGuidageRandomDelay());
-    }
-
-    private IEnumerator StartGuidageRandomDelay()
-    {
-        yield return new WaitForSeconds(Random.Range(0f, 2f));
-        StartGuidage();
+        if (autoStart) StartGuidage();
     }
 
     public void ToggleGuidage()
@@ -112,26 +99,19 @@ public class GuidageChainController : MonoBehaviour
         StopAllOutputAudio();
     }
 
-    // AppelÃ© depuis PlayerRelaySensor (sur le joueur)
+    // Appelé depuis PlayerRelaySensor (sur le joueur)
     public void OnEnterRelay(Transform hit)
     {
         if (!guidageActif) return;
-
-        RelayIdentifier id = hit.GetComponent<RelayIdentifier>();
-        if (id == null) return;
-
-        if (id.channelId != channelId)
-            return;
-
         if (!EnsureReadyRuntime()) return;
 
-        // Si on est dÃ©jÃ  en mode bouton, ignorer les balises
+        // Si on est déjà en mode bouton, ignorer les balises
         if (indexBalise >= relays.Count) return;
 
         Transform expected = relays[indexBalise].point;
         if (expected == null) return;
 
-        // RÃ©solution : si le collider est un enfant de la balise attendue, on â€œremonteâ€ au point attendu
+        // Résolution : si le collider est un enfant de la balise attendue, on “remonte” au point attendu
         Transform resolved = hit;
         if (hit != null && hit.IsChildOf(expected))
             resolved = expected;
@@ -146,7 +126,7 @@ public class GuidageChainController : MonoBehaviour
     {
         indexBalise++;
 
-        // Fin de chaÃ®ne => on bascule sur le bouton
+        // Fin de chaîne => on bascule sur le bouton
         if (indexBalise >= relays.Count)
         {
             StopAllOutputAudio();
@@ -196,7 +176,7 @@ public class GuidageChainController : MonoBehaviour
             return Vector3.Distance(playerHead.position, sourceEmitter.transform.position);
         }
 
-        // Sinon : distance totale â€œcouloirâ€ joueur -> balise courante -> ... -> bouton
+        // Sinon : distance totale “couloir” joueur -> balise courante -> ... -> bouton
         return DistanceTotaleVersSource(indexBalise);
     }
 
@@ -211,9 +191,6 @@ public class GuidageChainController : MonoBehaviour
 
         outAudio.spatialBlend = 1f;
         outAudio.playOnAwake = false;
-
-        if (couperSiMur && IsBlockedByWall(outAudio))
-            return;
 
         outAudio.volume = volume;
         outAudio.PlayOneShot(clip, volume);
@@ -313,15 +290,5 @@ public class GuidageChainController : MonoBehaviour
         if (indexBalise < relays.Count && relays[indexBalise].point == null) return false;
 
         return true;
-    }
-
-    private bool IsBlockedByWall(AudioSource outAudio)
-    {
-        if (outAudio == null || playerHead == null) return false;
-
-        Vector3 from = outAudio.transform.position;
-        Vector3 to = playerHead.position;
-
-        return Physics.Linecast(from, to, wallMask);
     }
 }

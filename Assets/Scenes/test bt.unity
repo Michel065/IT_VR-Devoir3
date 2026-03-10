@@ -517,7 +517,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 811e0d982c2c9224991250a15c551e01, type: 3}
+  m_Resource: {fileID: 8300000, guid: 28657be0f6c935c45bdedef78c0672e6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.789
   m_Pitch: 1
@@ -630,6 +630,11 @@ MonoBehaviour:
   volumeMax: 0.9
   autoStart: 1
   resetToStartOnEnable: 1
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 0
+  couperSiMur: 0
+  channelId: A
 --- !u!65 &849481189
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -748,6 +753,7 @@ GameObject:
   - component: {fileID: 1169228652}
   - component: {fileID: 1169228654}
   - component: {fileID: 1169228653}
+  - component: {fileID: 1169228655}
   m_Layer: 0
   m_Name: balise 1
   m_TagString: Relay
@@ -889,6 +895,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1169228655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169228651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b6174754a6b4404bafcc13bcadedebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelayIdentifier
+  channelId: A
 --- !u!1 &1263670595
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,6 +919,7 @@ GameObject:
   - component: {fileID: 1263670596}
   - component: {fileID: 1263670598}
   - component: {fileID: 1263670597}
+  - component: {fileID: 1263670599}
   m_Layer: 0
   m_Name: balise 2
   m_TagString: Relay
@@ -1041,6 +1061,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1263670599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263670595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b6174754a6b4404bafcc13bcadedebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelayIdentifier
+  channelId: A
 --- !u!1 &1287919951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,8 +1266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e617d761263a54c9faec37b9bafb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  manager: {fileID: 849481188}
-  relayTag: Relay
+  managers:
+  - {fileID: 849481188}
 --- !u!1 &1329258283
 GameObject:
   m_ObjectHideFlags: 0

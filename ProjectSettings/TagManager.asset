@@ -11,6 +11,7 @@ TagManager:
   - Wood
   - PlayerHead
   - Relay
+  - Wall
   layers:
   - Default
   - TransparentFX
